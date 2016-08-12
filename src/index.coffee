@@ -1,7 +1,3 @@
-# Promise polyfill
-unless global.Promise?
-  global.Promise = require('zousan')
-
 # Object.assign polyfill
 unless Object.assign?
   Object.defineProperty Object, 'assign',

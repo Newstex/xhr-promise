@@ -13,6 +13,14 @@ module.exports = class XMLHttpRequestPromise
 
   @DEFAULT_CONTENT_TYPE: 'application/x-www-form-urlencoded; charset=UTF-8'
 
+  ###
+  # XMLHttpRequestPromise.Promise
+  #
+  # The Promise/A+ compliant promises implementation that will be used when
+  # XHR requests are sent.
+  ###
+  @Promise: global.Promise or require('zousan')
+
   ##########################################################################
   ## Public methods #######################################################
   ########################################################################
@@ -35,7 +43,7 @@ module.exports = class XMLHttpRequestPromise
 
     options = Object.assign({}, defaults, options)
 
-    new Promise (resolve, reject) =>
+    new XMLHttpRequestPromise.Promise (resolve, reject) =>
       if !XMLHttpRequest
         @_handleError 'browser', reject, null, "browser doesn't support XMLHttpRequest"
         return

@@ -5,7 +5,8 @@
 
 This module wraps the [XMLHttpRequest](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest)
 object with [Promise/A+](https://promisesaplus.com/) compliant promises.
-The promise implementation is provided by the [zousan](https://github.com/bluejava/zousan) promise library.
+The promise implementation is provided by the [zousan](https://github.com/bluejava/zousan) promise library
+or the Promise/A+ compliant library of your choice.
 
 ## Browser support
 
@@ -83,6 +84,32 @@ var xhrPromise = new XMLHttpRequestPromise();
 xhrPromise.send({...})
   .then(function () {
     var xhr = xhrPromise.getXHR();
+  });
+```
+
+## Custom Promise implementation
+
+The default [zousan](https://github.com/bluejava/zousan) promise library can be overridden
+by the library of your choice when constructing `XMLHttpRequestPromise`. For example, to
+use [bluebird](http://bluebirdjs.com/) promises:
+
+```
+var Promise = require('bluebird');
+var XMLHttpRequestPromise = require('xhr-promise');
+
+// Use bluebird rather than zousan
+XMLHttpRequestPromise.Promise = Promise;
+
+var xhrPromise = new XMLHttpRequestPromise();
+
+xhrPromise.send({...})
+  .tap(function (results) {
+    if (results.responseText.length === 0) {
+      throw new Error('no results');
+    }
+  })
+  .then(function (results) {
+    // ...
   });
 ```
 

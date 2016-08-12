@@ -219,3 +219,35 @@ describe('request', function () {
     });
   });
 });
+
+describe('configuration', function() {
+  var defaultConfig = Object.assign({}, XMLHttpRequestPromise);
+
+  beforeEach(function() {
+    Object.assign(XMLHttpRequestPromise, defaultConfig);
+  });
+
+  function CustomPromise() {
+    this.then = function noop() { return noop; };
+    this.custom = true;
+  }
+
+  it('should use the specified Promise implementation', function () {
+    XMLHttpRequestPromise.Promise = CustomPromise;
+
+    var promise = new XMLHttpRequestPromise()
+      .send({url: '/hello'});
+
+    promise.should.have.property('custom');
+    promise.custom.should.be.true;
+  });
+
+  it('should have a default Promise implementation', function () {
+    var promise = new XMLHttpRequestPromise()
+      .send({url: '/hello'});
+
+    promise.should.not.have.property('custom');
+    promise.should.be.an.instanceOf(defaultConfig.Promise);
+  });
+
+});
